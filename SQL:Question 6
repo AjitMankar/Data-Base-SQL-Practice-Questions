@@ -1,0 +1,15 @@
+--Bank of Ireland has requested that you detect invalid transactions in December 2022.
+--An invalid transaction is one that occurs outside of the bank's normal business hours. The following are the hours of operation for all branches:
+
+--Monday - Friday 09:00 - 16:00
+--Saturday & Sunday Closed
+--Irish Public Holidays 25th and 26th December
+--Determine the transaction ids of all invalid transactions.
+
+
+select * from boi_transactions   ;
+
+select  * from boi_transactions where   strftime('%m-%d',time_stamp)  in ('12-25','12-26') OR strftime('%w',time_stamp)  in ('6','0')
+UNION
+
+select * from boi_transactions   where strftime('%H',time_stamp) <'09' OR strftime('%H',time_stamp) >'16';
