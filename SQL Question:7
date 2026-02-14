@@ -1,0 +1,24 @@
+You are given a table product_prices with columns:
+product_id, price, price_date
+
+👉 Question:
+Find products whose price was never reduced,
+but also never stayed the same on two consecutive price updates.
+
+⚠️ Constraints:
+• price updates can9 happen on irregular dates
+• multiple updates per product
+• solution must be written in pure SQL
+9
+WITH PREV_PRICE AS (
+select  lag(price) over (partition by product_id ORDER BY price_date)  as prev_price,product_id,price_date,price
+  from
+ product_prices )
+ 
+ Select  product_id,
+        price,sum(  CASE 
+         WHEN prev_price IS NOT NULL 
+                 AND price <= prev_price 
+            THEN 1 
+            ELSE 0 
+        END) As sum_count from PREV_PRICE group by product_id having sum_count=0 ;
